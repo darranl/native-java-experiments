@@ -6,8 +6,17 @@ add_executable(simple-c-app main.c)
 target_include_directories(simple-c-app PRIVATE
     $ENV{HOME}/local/include)
 
+# TODO This seems to work for now but should it reference
+# using find_library instead?
 target_link_directories(simple-c-app PRIVATE
     $ENV{HOME}/local/lib)
 
+# TODO - Add some kind of check to switch between the static and dynamic library.
+
+# Link the shared library
 target_link_libraries(simple-c-app PRIVATE
     simple-library)
+
+# Link the static library
+#target_link_libraries(simple-c-app PRIVATE
+#    simple-library-static)
