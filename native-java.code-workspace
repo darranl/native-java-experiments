@@ -5,6 +5,12 @@
 		},
 		{
 			"path": "simple-c-app"
+		},
+		{
+			"path": "simple-jni"
 		}
-	]
+	],
+	"settings": {
+		"java.configuration.updateBuildConfiguration": "interactive"
+	}
 }
