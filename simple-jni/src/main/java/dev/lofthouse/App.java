@@ -13,6 +13,11 @@ public class App {
 
     public static void main(String[] args) {
         System.out.println("Java says Hello World!");
+        System.out.println(System.getProperty("java.library.path"));
+
+        System.loadLibrary("jni-library");
+        //System.loadLibrary("simple-library");
+
         final int x = 11;
         System.out.printf("addOne(%d)= %d\n", x, addOne(x));
         sayHello();

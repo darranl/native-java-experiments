@@ -25,6 +25,14 @@ target_include_directories(jni-library PRIVATE
 target_include_directories(jni-library PRIVATE
     $ENV{HOME}/local/include) # This one was installed.
 
+# Link the shared library
+target_link_directories(jni-library PRIVATE
+    $ENV{HOME}/local/lib)
+
+# Link the shared library
+target_link_libraries(jni-library PRIVATE
+    simple-library)
+
 # Install the shared library
 install(TARGETS jni-library
     LIBRARY DESTINATION lib)
