@@ -8,6 +8,9 @@
 		},
 		{
 			"path": "simple-jni"
+		},
+		{
+			"path": "jni-library"
 		}
 	],
 	"settings": {
