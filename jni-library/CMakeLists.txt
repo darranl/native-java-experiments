@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.10.0)
 
 if (EXISTS $ENV{HOME}/local)
     set(CMAKE_INSTALL_PREFIX $ENV{HOME}/local)
+    message("Setting CMAKE_INSTALL_PREFIX to $ENV{HOME}/local")
 endif()
 
 project(jni-library VERSION 0.1.0 LANGUAGES C)
