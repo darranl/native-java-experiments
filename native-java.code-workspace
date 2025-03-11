@@ -11,6 +11,9 @@
 		},
 		{
 			"path": "jni-library"
+		},
+		{
+			"path": "simple-foreign"
 		}
 	],
 	"settings": {
