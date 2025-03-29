@@ -3,6 +3,8 @@
 This repository contains a set of simple projects to experiment with Java
 interacting with native code.
 
+A blog post describing this project can be found on my [https://lofthouse.dev](https://lofthouse.dev/2025/03/29/beginning-native-java-development/) site.
+
 # Projects
 
 This repository uses the following projects:
