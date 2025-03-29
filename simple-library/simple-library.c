@@ -4,7 +4,7 @@
 
 int add_one(int x)
 {
-    return x + 2;
+    return x + 1;
 }
 
 void say_hello()
