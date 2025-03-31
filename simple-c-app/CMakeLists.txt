@@ -11,8 +11,6 @@ target_include_directories(simple-c-app PRIVATE
 target_link_directories(simple-c-app PRIVATE
     $ENV{HOME}/local/lib)
 
-# TODO - Add some kind of check to switch between the static and dynamic library.
-
 # Link the shared library
 target_link_libraries(simple-c-app PRIVATE
     simple-library)
