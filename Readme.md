@@ -46,7 +46,12 @@ Verify the exported symbols in the shared library:
 nm -D $HOME/local/lib/libsimple-library.so | grep -E 'add_one|say_hello'
 ```
 
-Expected output: two `T` (text/code) symbols — `add_one` and `say_hello`.
+Expected output: two `T` (text/code) symbols — `add_one` and `say_hello`:
+
+```
+0000000000001109 T add_one
+0000000000001118 T say_hello
+```
 
 Check the shared library's runtime dependencies:
 
@@ -56,24 +61,187 @@ ldd $HOME/local/lib/libsimple-library.so
 
 Expected: only `libc.so` (no extra dependencies).
 
-## Other C projects
+## simple-c-app
 
-`jni-library` and `simple-c-app` both depend on `simple-library` and follow the same CMake pattern (`mkdir build && cd build && cmake .. && make && make install`). Build `simple-library` first.
+**Prerequisite:** `simple-library` must be built and installed first.
 
-## Java projects
+```bash
+mkdir simple-c-app/build && cd simple-c-app/build
+cmake ..
+make
+```
+
+Note: there is no `make install` — the executable lives in `build/`.
+
+### Running
+
+From the `simple-c-app/` directory:
+
+```bash
+cd simple-c-app
+./run-app.sh
+```
+
+Expected output:
+
+```
+Hello, from simple-c-app!
+add_one(5) = 6
+Hello, from simple-library!
+```
+
+## simple-jni (Maven — generates JNI headers)
+
+**Prerequisite:** `simple-library` must be built and installed first.
+
+**Important:** Run this Maven build from inside the `simple-jni/` directory, not from the
+repository root with `-f`. The compiler plugin generates JNI C headers to `target/include/`
+relative to the working directory, and `jni-library`'s CMake build looks for them at
+`../simple-jni/target/include/`.
+
+```bash
+cd simple-jni
+mvn clean package
+```
+
+Verify the headers were generated:
+
+```bash
+ls simple-jni/target/include/
+# dev_lofthouse_App.h
+```
+
+## jni-library
+
+**Prerequisites:**
+1. `simple-library` built and installed (`$HOME/local/lib/libsimple-library.so`)
+2. `simple-jni` Maven build completed (generates `simple-jni/target/include/dev_lofthouse_App.h`)
+
+```bash
+mkdir jni-library/build && cd jni-library/build
+cmake ..
+make
+make install
+```
+
+`make install` copies `libjni-library.so` to `$HOME/local/lib/`.
+
+## simple-jni (JVM run)
+
+**Prerequisite:** `jni-library` must be built and installed to `$HOME/local/lib/`.
+
+From the `simple-jni/` directory:
+
+```bash
+cd simple-jni
+./run-app.sh
+```
+
+Expected output:
+
+```
+Java says Hello World!
+<java.library.path — varies by machine>
+addOne(11)= 12
+Java says Goodbye World!
+Hello, from simple-library!
+```
+
+> **Note:** `Hello, from simple-library!` appears after `Java says Goodbye World!` due to
+> stdout buffering differences between Java's `PrintStream` and C's `printf`.
+
+## simple-foreign
+
+**Prerequisite:** `simple-library` must be built and installed first.
+
+```bash
+cd simple-foreign
+mvn clean package
+./run-app.sh
+```
+
+Expected output:
+
+```
+addOne(14) = 15
+Hello World!
+Hello, from simple-library!
+```
+
+> **Note:** `say_hello()` is invoked before `add_one()` in the source, but `Hello, from simple-library!`
+> appears last due to stdout buffering differences between Java's `PrintStream` and C's `printf`.
+
+## simple-jni (native image)
+
+**Prerequisite:** `jni-library` must be built and installed to `$HOME/local/lib/`.
+
+GraalVM is required (not included in standard Temurin/OpenJDK distributions).
+
+From the `simple-jni/` directory:
+
+```bash
+cd simple-jni
+mvn clean package -Dnative
+./run-app-native.sh
+```
+
+Expected output:
+
+```
+Java says Hello World!
+<LD_LIBRARY_PATH — varies by machine>
+addOne(11)= 12
+Java says Goodbye World!
+Hello, from simple-library!
+```
+
+> **Note:** `Hello, from simple-library!` appears after `Java says Goodbye World!` due to
+> stdout buffering differences between Java's `PrintStream` and C's `printf`.
+
+## simple-foreign (native image)
+
+**Prerequisite:** `simple-library` must be built and installed first.
+
+GraalVM is required (not included in standard Temurin/OpenJDK distributions).
+
+From the `simple-foreign/` directory:
+
+```bash
+cd simple-foreign
+mvn clean package -Dnative
+./run-app-native.sh
+```
+
+`simple-foreign` includes a `ForeignRegistrationFeature` (in
+`src/main/java/dev/lofthouse/graal/`) that registers the two Foreign Function API downcall
+stubs (`add_one` and `say_hello`) at build time. GraalVM's Substrate VM cannot discover these
+at runtime, so they must be declared explicitly for AOT compilation. The feature is activated
+via `META-INF/native-image/native-image.properties`.
+
+Expected output:
+
+```
+addOne(14) = 15
+Hello World!
+Hello, from simple-library!
+```
+
+> **Note:** `say_hello()` is invoked before `add_one()` in the source, but `Hello, from simple-library!`
+> appears last due to stdout buffering differences between Java's `PrintStream` and C's `printf`.
+
+## Java projects — common notes
 
 ```bash
 # Build and run tests
-mvn -f <project>/pom.xml clean package
+mvn clean package
 
 # Build with GraalVM native image
-mvn -f <project>/pom.xml clean package -Dnative
+mvn clean package -Dnative
 
 # Run tests only
-mvn -f <project>/pom.xml test
+mvn test
 ```
 
-Each project also provides `run-app.sh` (JVM) and `run-app-native.sh` (native image) scripts.
+Each Java project provides `run-app.sh` (JVM) and `run-app-native.sh` (native image) scripts.
 
 **Prerequisites:** Java 25 is required. GraalVM is required for native image builds (the `-Dnative` profile).
-

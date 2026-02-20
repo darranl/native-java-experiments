@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10.0)
 
 if (EXISTS $ENV{HOME}/local)
-    set(CMAKE_INSTALL_PREFIX $ENV{HOME}/local)
+    set(CMAKE_INSTALL_PREFIX $ENV{HOME}/local CACHE PATH "Install prefix" FORCE)
     message("Setting CMAKE_INSTALL_PREFIX to $ENV{HOME}/local")
 endif()
 

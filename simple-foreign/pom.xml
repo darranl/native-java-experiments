@@ -40,6 +40,14 @@
       <artifactId>junit-jupiter-params</artifactId>
       <scope>test</scope>
     </dependency>
+    <!-- GraalVM APIs needed to compile ForeignRegistrationFeature; provided at runtime by native-image tool -->
+    <!-- https://mvnrepository.com/artifact/org.graalvm.nativeimage/library-support -->
+    <dependency>
+      <groupId>org.graalvm.nativeimage</groupId>
+      <artifactId>library-support</artifactId>
+      <version>25.0.2</version>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
 
   <profiles>
@@ -50,16 +58,6 @@
           <name>native</name>
         </property>
       </activation>
-
-      <dependencies>
-<!-- https://mvnrepository.com/artifact/org.graalvm.nativeimage/library-support -->
-<dependency>
-    <groupId>org.graalvm.nativeimage</groupId>
-    <artifactId>library-support</artifactId>
-    <version>25.0.2</version>
-    <scope>provided</scope>
-</dependency>
-      </dependencies>
 
       <build>
         <plugins>
