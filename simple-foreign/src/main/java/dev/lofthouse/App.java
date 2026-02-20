@@ -10,7 +10,8 @@ import java.lang.foreign.SymbolLookup;
 import java.lang.invoke.MethodHandle;
 
 /**
- * Hello world!
+ * Demonstrates calling native C functions from Java using the Foreign Function &amp; Memory API.
+ * Functions from simple-library are looked up and invoked directly without JNI stubs.
  */
 public class App {
     public static void main(String[] args) throws Throwable {

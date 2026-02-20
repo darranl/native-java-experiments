@@ -6,8 +6,9 @@ add_executable(simple-c-app main.c)
 target_include_directories(simple-c-app PRIVATE
     $ENV{HOME}/local/include)
 
-# TODO This seems to work for now but should it reference
-# using find_library instead?
+# Using target_link_directories with a known install prefix is simpler than
+# find_library() and sufficient here since simple-library is always installed
+# to $HOME/local by its own CMake build.
 target_link_directories(simple-c-app PRIVATE
     $ENV{HOME}/local/lib)
 

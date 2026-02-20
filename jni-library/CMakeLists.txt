@@ -30,7 +30,6 @@ target_include_directories(jni-library PRIVATE
 target_link_directories(jni-library PRIVATE
     $ENV{HOME}/local/lib)
 
-# Link the shared library
 target_link_libraries(jni-library PRIVATE
     simple-library)
 

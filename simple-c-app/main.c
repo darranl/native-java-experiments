@@ -9,4 +9,6 @@ int main(int, char**){
     printf("add_one(%d) = %d\n", a, add_one(a));
 
     say_hello();
+
+    return 0;
 }

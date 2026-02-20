@@ -1,7 +1,8 @@
 package dev.lofthouse;
 
 /**
- * Hello world!
+ * Demonstrates calling native C functions from Java using JNI.
+ * The JNI stubs are implemented in jni-library, which delegates to simple-library.
  */
 public class App {
 
@@ -19,7 +20,7 @@ public class App {
         //System.loadLibrary("simple-library");
 
         final int x = 11;
-        System.out.printf("addOne(%d)= %d\n", x, addOne(x));
+        System.out.printf("addOne(%d) = %d\n", x, addOne(x));
         sayHello();
         System.out.println("Java says Goodbye World!");
     }

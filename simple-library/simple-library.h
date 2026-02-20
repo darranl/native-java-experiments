@@ -1,5 +1,5 @@
-#ifndef SIMPLY_LIBRARY_H
-#define SIMPLY_LIBRARY_H
+#ifndef SIMPLE_LIBRARY_H
+#define SIMPLE_LIBRARY_H
 
 int add_one(int x);
 
