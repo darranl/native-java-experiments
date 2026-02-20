@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Experimental projects demonstrating Java interacting with native C code through multiple approaches: traditional JNI, the modern Foreign Function API (Java 24), and GraalVM native image compilation. Associated blog post: https://lofthouse.dev/2025/03/29/beginning-native-java-development/
+Experimental projects demonstrating Java interacting with native C code through multiple approaches: traditional JNI, the modern Foreign Function API (Java 25), and GraalVM native image compilation. Associated blog post: https://lofthouse.dev/2025/03/29/beginning-native-java-development/
 
 ## Architecture
 
@@ -18,38 +18,13 @@ All approaches share a common C library (`simple-library`) providing `add_one(in
 
 ## Build Commands
 
-### C projects (simple-library, jni-library, simple-c-app)
+See `Readme.md` for full build instructions for all C and Java projects.
 
-```bash
-# Each C project follows the same pattern:
-mkdir <project>/build && cd <project>/build
-cmake ..
-make
-make install   # installs to $HOME/local
-```
-
-Build simple-library first — jni-library and simple-c-app depend on it.
-
-### Java projects (simple-jni, simple-foreign)
-
-```bash
-# Build and test
-mvn -f <project>/pom.xml clean package
-
-# Build with GraalVM native image
-mvn -f <project>/pom.xml clean package -Dnative
-
-# Run tests only
-mvn -f <project>/pom.xml test
-```
-
-### Running applications
-
-Each Java project has `run-app.sh` (JVM) and `run-app-native.sh` (native image) scripts in its directory.
+**Claude-specific note:** `simple-jni`'s Maven build generates JNI headers to `target/include`; these are consumed by `jni-library`'s CMake build.
 
 ## Key Technical Details
 
-- Java 24 required (maven.compiler.release=24)
+- Java 25 required (maven.compiler.release=25)
 - GraalVM needed for native image builds (activated via `-Dnative` profile)
 - Native builds use `--enable-native-access ALL-UNNAMED`
 - simple-jni's Maven build generates JNI headers to `target/include` (used by jni-library's CMake)
