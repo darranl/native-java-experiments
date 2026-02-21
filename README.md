@@ -1,6 +1,6 @@
 # traffic-lights
 
-C application for Raspberry Pi traffic light LED control. Currently in early stages — the code will evolve incrementally toward hardware LED control.
+A Raspberry Pi C application that drives three GPIO pins through a complete 4-phase UK traffic light cycle using WiringPi.
 
 ## Prerequisites
 
@@ -21,6 +21,8 @@ C application for Raspberry Pi traffic light LED control. Currently in early sta
 | `deploy-pi.sh` | Build and deploy binary to Pi over SSH |
 | `run-pi.sh` | Run the deployed binary on the Pi over SSH |
 | `debug-pi.sh` | Start `gdbserver` on the Pi for remote debugging (port 1234) |
+| `.vscode/c_cpp_properties.json` | IntelliSense configuration for aarch64 cross-compilation |
+| `.vscode/launch.json` | Remote GDB debug launch configuration |
 
 ## Build
 

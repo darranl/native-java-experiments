@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-A C application targeting LED control for a traffic light. Currently in early stages — the code will evolve incrementally toward hardware LED control.
+A Raspberry Pi C application that drives three GPIO pins through a complete 4-phase UK traffic light cycle using WiringPi.
 
 ## Architecture
 
