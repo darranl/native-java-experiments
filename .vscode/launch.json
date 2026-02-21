@@ -1,0 +1,21 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Pi: Remote Debug",
+            "type": "gdb",
+            "request": "attach",
+            "executable": "${workspaceFolder}/build-pi4/traffic-lights",
+            "target": "localhost:1234",
+            "remote": true,
+            "cwd": "${workspaceFolder}",
+            "gdbpath": "/usr/bin/gdb",
+            "autorun": [
+                "set debuginfod enabled off",
+                "set exec-file-mismatch off",
+                "set sysroot /home/darranl/mnt/pios12_root",
+                "-enable-pretty-printing"
+            ]
+        }
+    ]
+}

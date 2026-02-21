@@ -19,5 +19,6 @@ BUILD_DIR="build-${PI_TARGET}"
 
 cmake -S . -B "${BUILD_DIR}" \
     -DCMAKE_TOOLCHAIN_FILE=cmake/pi-toolchain.cmake \
-    -DPI_TARGET="${PI_TARGET}"
+    -DPI_TARGET="${PI_TARGET}" \
+    -DCMAKE_BUILD_TYPE=Debug
 cmake --build "${BUILD_DIR}"
