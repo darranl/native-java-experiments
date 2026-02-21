@@ -16,6 +16,6 @@ done
 # Stop any running instance so the binary is not busy when we overwrite it
 ssh "${PI_HOST}" "pkill -f traffic-lights || true"
 
-ssh "${PI_HOST}" "mkdir -p ~/.local/bin && cat > ~/.local/bin/traffic-lights && chmod +x ~/.local/bin/traffic-lights" \
-    < "build-${PI_TARGET}/traffic-lights"
+ssh "${PI_HOST}" "mkdir -p ~/.local/bin"
+scp -p "build-${PI_TARGET}/traffic-lights" "${PI_HOST}:~/.local/bin/traffic-lights"
 echo "Deployed to ${PI_HOST}:~/.local/bin/traffic-lights"
