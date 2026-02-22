@@ -34,6 +34,31 @@ static const Phase phases[] = {
     { LIGHT_AMBER,       750 },
 };
 
+static struct gpiod_line *open_line(struct gpiod_chip *chip,
+                                    unsigned int pin, const char *name) {
+    struct gpiod_line *line = gpiod_chip_get_line(chip, pin);
+    if (!line)
+        fprintf(stderr, "Failed to get GPIO %u (%s)\n", pin, name);
+    return line;
+}
+
+static int claim_output(struct gpiod_line *line,
+                        unsigned int pin, const char *name) {
+    if (gpiod_line_request_output(line, CONSUMER, 0) >= 0)
+        return 0;
+
+    fprintf(stderr, "Failed to claim GPIO %u (%s) as output", pin, name);
+    if (gpiod_line_update(line) == 0) {
+        const char *consumer = gpiod_line_consumer(line);
+        if (consumer && consumer[0] != '\0')
+            fprintf(stderr, ": held by '%s'", consumer);
+        else if (gpiod_line_is_used(line))
+            fprintf(stderr, ": in use (kernel or unknown consumer)");
+    }
+    fprintf(stderr, "\n");
+    return -1;
+}
+
 static void apply_lights(const Lights *lights, LightMask mask) {
     gpiod_line_set_value(lights->red,   (mask & LIGHT_RED)   ? 1 : 0);
     gpiod_line_set_value(lights->amber, (mask & LIGHT_AMBER) ? 1 : 0);
@@ -57,21 +82,21 @@ int main(void) {
     fflush(stdout);
 
     Lights lights = {
-        .red   = gpiod_chip_get_line(chip, PIN_RED),
-        .amber = gpiod_chip_get_line(chip, PIN_AMBER),
-        .green = gpiod_chip_get_line(chip, PIN_GREEN),
+        .red   = open_line(chip, PIN_RED,   "red"),
+        .amber = open_line(chip, PIN_AMBER, "amber"),
+        .green = open_line(chip, PIN_GREEN, "green"),
     };
 
     if (!lights.red || !lights.amber || !lights.green) {
-        fprintf(stderr, "gpiod_chip_get_line failed\n");
         gpiod_chip_close(chip);
         return 1;
     }
 
-    if (gpiod_line_request_output(lights.red,   CONSUMER, 0) < 0 ||
-        gpiod_line_request_output(lights.amber, CONSUMER, 0) < 0 ||
-        gpiod_line_request_output(lights.green, CONSUMER, 0) < 0) {
-        fprintf(stderr, "gpiod_line_request_output failed\n");
+    int rc = 0;
+    rc |= claim_output(lights.red,   PIN_RED,   "red");
+    rc |= claim_output(lights.amber, PIN_AMBER, "amber");
+    rc |= claim_output(lights.green, PIN_GREEN, "green");
+    if (rc != 0) {
         gpiod_chip_close(chip);
         return 1;
     }
