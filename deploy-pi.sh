@@ -14,7 +14,7 @@ done
 ./build-pi.sh --target="${PI_TARGET}"
 
 # Stop any running instance so the binary is not busy when we overwrite it
-ssh "${PI_HOST}" "pkill -f traffic-lights || true"
+ssh "${PI_HOST}" "pkill -f '[t]raffic-lights' || true"
 
 ssh "${PI_HOST}" "mkdir -p ~/.local/bin"
 scp -p "build-${PI_TARGET}/traffic-lights" "${PI_HOST}:~/.local/bin/traffic-lights"
